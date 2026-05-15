@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block title %}Register | JobRec{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Hero Header matching the startup dark theme */
+    .auth-header {
+        background-color: #1a1a1a;
+        padding: 100px 20px 160px 20px;
+        margin-top: -20px; 
+        text-align: center;
+        border-bottom-left-radius: 60px;
+        border-bottom-right-radius: 60px;
+    }
+
+    .auth-header h1 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 48px;
+        letter-spacing: -2px;
+        background: linear-gradient(to right, #ff8a00, #da1b60);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .overlap-card {
+        margin-top: -100px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .glass-card {
+        background: #FFFFFF;
+        border-radius: 35px !important;
+        border: 1px solid rgba(255, 255, 255, 1) !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Interactive Role Selection Cards */
+    .role-option {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+    .role-option input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .role-card {
+        border: 2px solid #f3f4f6;
+        border-radius: 25px;
+        padding: 28px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-align: left;
+        background-color: #f9fafb;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .role-icon {
+        width: 64px;
+        height: 64px;
+        background: #FFFFFF;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        font-size: 1.6rem;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    /* Selection State */
+    .role-option input:checked + .role-card {
+        border-color: #da1b60;
+        background-color: #fffafb;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(218, 27, 96, 0.1);
+    }
+
+    .role-option input:checked + .role-card .role-icon {
+        background: #da1b60;
+        color: white !important;
+    }
+
+    .role-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+        color: #1a1a1a;
+    }
+
+    .role-desc {
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    /* Action Button */
+    .btn-register-main {
+        background: #da1b60;
+        color: white !important;
+        padding: 16px;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border: none;
+        box-shadow: 0 10px 20px rgba(218, 27, 96, 0.2);
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .btn-register-main:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+        box-shadow: 0 15px 25px rgba(218, 27, 96, 0.35);
+    }
+</style>
+
+<div class="auth-header">
+    <div class="container">
+        <h1>Join the Future</h1>
+        <p class="text-white-50 fs-6 mx-auto" style="max-width: 500px;">
+            Create your JobRec account and let our AI handle the search for you.
+        </p>
+    </div>
+</div>
+
+<div class="container overlap-card mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-6">
+            
+            <div class="card glass-card border-0">
+                <div class="card-body p-4 p-md-5">
+
+                    <h4 class="text-center fw-bold mb-4" style="font-family: 'Plus Jakarta Sans', sans-serif; color: #1a1a1a;">Choose your path</h4>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Job Seeker Option -->
+                        <label class="role-option">
+                            <input type="radio" name="role" value="jobseeker" required checked>
+                            <div class="role-card">
+                                <div class="role-icon" style="color: #da1b60;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="role-title">Job Seeker</div>
+                                    <p class="role-desc">Get matched with top tech roles based on your Django and ML skills.</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <!-- Recruiter Option -->
+                        <label class="role-option">
+                            <input type="radio" name="role" value="recruiter">
+                            <div class="role-card">
+                                <div class="role-icon" style="color: #da1b60;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="role-title">Recruiter</div>
+                                    <p class="role-desc">Post opportunities and find the best engineers for your growing team.</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <button type="submit" class="btn-register-main">
+                            Create Account &rarr;
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-5 pt-4 border-top">
+                        <p class="text-muted mb-0">
+                            Already part of the community? 
+                            <a href="{% url 'login' %}" class="fw-bold ms-1" style="color: #da1b60; text-decoration: none;">
+                                Log in here
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

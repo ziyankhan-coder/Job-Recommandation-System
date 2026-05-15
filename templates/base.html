@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JobRec | AI Career Discovery{% endblock %}</title>
+
+    <!-- External Assets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+<style>
+    :root {
+        --brand-pink: #da1b60; 
+        --brand-pink-hover: #b9134f;
+        --page-bg: #fffaf5;             /* Warm startup off-white */
+        --brand-text: #1a1a1a;          /* Deep black/gray */
+        --navbar-bg: rgba(255, 250, 245, 0.85);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--page-bg); 
+        color: var(--brand-text);
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+        background-color: var(--navbar-bg); 
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        padding: 1.2rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand {
+        color: var(--brand-text) !important;
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: -1.5px;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    
+    .navbar-brand span {
+        color: var(--brand-pink);
+    }
+
+    .nav-link {
+        color: var(--brand-text) !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-left: 1.2rem;
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--brand-pink) !important;
+    }
+
+    /* ===== THEME BUTTONS ===== */
+    .btn-nav-pill {
+        border-radius: 100px;
+        padding: 10px 26px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin-left: 10px;
+    }
+
+    .btn-login {
+        color: var(--brand-text);
+        background: transparent;
+        border: 2px solid transparent;
+    }
+    .btn-login:hover {
+        color: var(--brand-pink) !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-signup {
+        background-color: var(--brand-pink);
+        color: white !important;
+        border: none;
+        box-shadow: 0 10px 20px rgba(218, 27, 96, 0.2);
+    }
+    .btn-signup:hover {
+        background-color: var(--brand-pink-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px rgba(218, 27, 96, 0.3);
+    }
+
+    /* ===== CONTENT WRAPPER ===== */
+    .content-wrapper {
+        min-height: 85vh;
+    }
+
+    /* ===== TOAST (MESSAGES) ===== */
+    .toast {
+        border-radius: 20px;
+        border: none !important;
+        background: white;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+        overflow: hidden;
+    }
+
+    .toast-body {
+        font-weight: 600;
+        padding: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+        padding: 60px 0 40px;
+        background: transparent;
+        color: #9ca3af;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Toast Notification System -->
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3 mt-4" style="z-index: 1100;">
+    {% if messages %}
+        {% for message in messages %} 
+            <div class="toast align-items-center mb-3" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex align-items-center p-2">
+                    <div class="toast-body flex-grow-1">
+                        {% if message.tags == 'success' %} ✨ {% else %} ⚠️ {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            jobRec<span>*</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'job_list' %}">Explore Jobs</a>
+                    </li>
+                    {% if user.user_type == 'recruiter' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'add_job' %}" style="color: var(--brand-pink) !important;">+ Post Job</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-nav-pill btn-login" href="{% url 'logout' %}">Log out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-nav-pill btn-login" href="{% url 'login' %}">Log in</a>
+                    </li>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a class="btn btn-nav-pill btn-signup" href="{% url 'register' %}">Get Started</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Content Block -->
+<main class="content-wrapper">
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    © 2026 JobRec • Made for Smart Careers
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        toastElList.forEach(function(toastEl) {
+            new bootstrap.Toast(toastEl, { autohide: true, delay: 5000 }).show();
+        });
+    });
+</script>
+</body>
+</html>

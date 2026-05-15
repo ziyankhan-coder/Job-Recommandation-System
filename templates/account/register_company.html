@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Register Company | JobRec{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+
+                <h3 class="text-center text-primary mb-3">
+                    Register Your Company
+                </h3>
+
+                <p class="text-center text-muted mb-4">
+                    Create a company profile to start posting jobs
+                </p>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger py-2">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- User Credentials -->
+                    <h6 class="text-primary mb-3">Account Details</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm a password" required>
+                    </div>
+
+                    <div class="mb-3"> <label class="form-label">Email</label> 
+                        <input type="email" class="form-control" name="email" required> 
+                    </div> <!-- Phone --> <div class="mb-3"> <label class="form-label">Phone Number</label> 
+                        <input type="text" class="form-control" name="phone"> </div>
+
+                    <!-- Company Info -->
+                    <h6 class="text-primary mb-3">Company Information</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="Company name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Brief company description" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Website</label>
+                        <input type="url" name="website" class="form-control" placeholder="https://example.com">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Industry</label>
+                            <input type="text" name="industry" class="form-control" placeholder="IT, Finance, etc.">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Company Size</label>
+                            <select name="company_size" class="form-select">
+                                <option value="">Select size</option>
+                                <option value="1-10">1–10 employees</option>
+                                <option value="11-50">11–50 employees</option>
+                                <option value="51-200">51–200 employees</option>
+                                <option value="201-500">201–500 employees</option>
+                                <option value="501-1000">501–1000 employees</option>
+                                <option value="1000+">1000+ employees</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" class="form-control" placeholder="City, Country">
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Founded Year</label>
+                            <input type="number" name="founded_year" class="form-control" placeholder="e.g. 2010" min="1800" max="2100">
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            Register Company
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

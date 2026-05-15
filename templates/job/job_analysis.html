@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}Job Analysis | JobRec{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="text-primary mb-4">Job Analysis for {{ title }}</h2>
+
+            <div class="row">
+                <!-- Job Details -->
+                <div class="col-md-7">
+                    <h5 class="mb-3 text-secondary">Job Details</h5>
+                    <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item">
+                            <strong>Company:</strong> {{ company }}
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Location:</strong> {{ location }}
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Salary:</strong> {{ salary }}
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Posted At:</strong> {{ posted_at }}
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Description:</strong>
+                            <p class="mt-2 text-muted" style="white-space: pre-line;">
+                                {{ description }}
+                            </p>
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Required Skills:</strong>
+
+                            <div class="mt-2">
+                                {% for skill in required_skills %}
+                                    <span class="badge bg-primary me-2 mb-2 px-3 py-2">
+                                        {{ skill }}
+                                    </span>
+                                {% empty %}
+                                    <span class="text-muted">No skills listed</span>
+                                {% endfor %}
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- Application & Analysis Section -->
+                <div class="col-md-5">
+
+                    <!-- Application Statistics Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="text-secondary mb-3">Application Statistics</h5>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>Total Applications</span>
+                                <span class="badge bg-dark px-3 py-2">
+                                    {{ total_applications }}
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>Shortlisted</span>
+                                <span class="badge bg-success px-3 py-2">
+                                    {{ shortlisted_count }}
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Rejected</span>
+                                <span class="badge bg-danger px-3 py-2">
+                                    {{ rejected_count }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% if request.user.user_type == "jobseeker" %}
+                    <!-- Skill Match Analysis Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body text-center">
+                            <h5 class="text-secondary mb-4">Skill Match Analysis</h5>
+
+                            <div class="position-relative d-inline-block">
+                                <canvas id="progressChart" width="200" height="200"></canvas>
+
+                                <!-- Center Percentage -->
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <h4 class="mb-0 fw-bold">{{ match_percentage }}%</h4>
+                                    <small class="text-muted">Match</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Skills Breakdown -->
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6 class="mb-3 text-secondary">Skills Breakdown</h6>
+
+                            <div class="row">
+
+                                <!-- Matched Skills -->
+                                <div class="col-md-6">
+                                    <h6 class="text-success mb-2">Matched</h6>
+                                    <div class="border rounded p-2 bg-light" style="max-height:150px; overflow-y:auto;">
+                                        {% for skill in matched_skills %}
+                                            <span class="badge bg-success me-2 mb-2">
+                                                {{ skill }}
+                                            </span>
+                                        {% empty %}
+                                            <small class="text-muted">No matched skills</small>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- Missing Skills -->
+                                <div class="col-md-6">
+                                    <h6 class="text-danger mb-2">Missing</h6>
+                                    <div class="border rounded p-2 bg-light" style="max-height:150px; overflow-y:auto;">
+                                        {% for skill in missing_skills %}
+                                            <span class="badge bg-danger me-2 mb-2">
+                                                {{ skill }}
+                                            </span>
+                                        {% empty %}
+                                            <small class="text-muted">No missing skills</small>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const percentage = parseFloat("{{ match_percentage|default:'0' }}");    
+
+const ctx = document.getElementById('progressChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [percentage, 100 - percentage],
+            backgroundColor: [
+                percentage >= 70 ? '#28a745' :
+                percentage >= 40 ? '#ffc107' :
+                '#dc3545',
+                '#e9ecef'
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        cutout: '75%',
+        responsive: false,
+        plugins: {
+            tooltip: { enabled: false },
+            legend: { display: false }
+        }
+    }
+});
+</script>
+{% endblock %}

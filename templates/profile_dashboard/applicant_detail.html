@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Applicant Profile | JobRec{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+
+                <h3 class="text-primary mb-4 text-center">
+                    Applicant Profile
+                </h3>
+
+                <div class="mb-3">
+                    <p class="text-muted mb-1">Name</p>
+                    <h5>{{ applicant.username }}</h5>
+                </div>
+
+                <div class="mb-3">
+                    <p class="text-muted mb-1">Skills</p>
+                    <p class="mb-0">{{ applicant_skills }}</p>
+                </div>
+
+                {% if applicant.email %}
+                <div class="mb-3">
+                    <p class="text-muted mb-1">Email</p>
+                    <p class="mb-0">{{ applicant.email }}</p>
+                </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+                        Back
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

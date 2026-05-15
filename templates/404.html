@@ -1,0 +1,704 @@
+{% extends 'base.html' %}
+
+{% block title %}404 — Not Found | JobRec{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      background: #FFF8F3;
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ENTRY LOADER */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #FFF8F3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity .5s ease;
+    }
+
+    #loader.gone {
+      opacity: 0;
+      pointer-events: none
+    }
+
+    .spin-ring {
+      width: 58px;
+      height: 58px;
+      border: 5px solid #FFE0D0;
+      border-top-color: #FF7043;
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* SCENE */
+    .scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .65s ease .1s, transform .65s ease .1s;
+    }
+
+    .scene.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    /* 404 ROW */
+    .row404 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      gap: 6px;
+    }
+
+    .digit {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(110px, 16vw, 175px);
+      color: #2B2B2B;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ZERO WRAPPER */
+    .zero-wrap {
+      position: relative;
+      width: clamp(118px, 16vw, 175px);
+      height: clamp(118px, 16vw, 175px);
+      flex-shrink: 0;
+    }
+
+    /* O ring */
+    .zero-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: clamp(10px, 1.8vw, 18px) solid #2B2B2B;
+      background: #fff;
+      box-shadow: 4px 4px 0 #2B2B2B;
+    }
+
+    /* ===== MAN ON TOP OF O ===== */
+    .man {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      margin-top: 10px;
+      /* sits slightly onto the ring */
+      width: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 20;
+      animation: manSway 3s ease-in-out infinite;
+    }
+
+    @keyframes manSway {
+
+      0%,
+      100% {
+        transform: translate(-50%, -100%) rotate(0deg)
+      }
+
+      30% {
+        transform: translate(-50%, -100%) rotate(-3deg)
+      }
+
+      70% {
+        transform: translate(-50%, -100%) rotate(3deg)
+      }
+    }
+
+    /* HEAD */
+    .head {
+      width: 28px;
+      height: 28px;
+      background: #FFCC80;
+      border-radius: 50%;
+      border: 2.5px solid #D97B3A;
+      position: relative;
+      flex-shrink: 0;
+      animation: headNod 2.6s ease-in-out infinite;
+    }
+
+    @keyframes headNod {
+
+      0%,
+      100% {
+        transform: rotate(0)
+      }
+
+      25% {
+        transform: rotate(-12deg)
+      }
+
+      75% {
+        transform: rotate(12deg)
+      }
+    }
+
+    /* hair */
+    .head::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 2px;
+      right: 2px;
+      height: 11px;
+      background: #3E2723;
+      border-radius: 14px 14px 0 0;
+      z-index: 1;
+    }
+
+    /* face overlay so hair goes behind */
+    .head-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .eye {
+      position: absolute;
+      top: 10px;
+      width: 5px;
+      height: 5px;
+      background: #2B2B2B;
+      border-radius: 50%;
+      animation: blink 4s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .eye.l {
+      left: 5px
+    }
+
+    .eye.r {
+      right: 5px
+    }
+
+    @keyframes blink {
+
+      0%,
+      94%,
+      100% {
+        transform: scaleY(1)
+      }
+
+      97% {
+        transform: scaleY(0.08)
+      }
+    }
+
+    .smile {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 6px;
+      border-bottom: 2.5px solid #C96A2C;
+      border-radius: 0 0 9px 9px;
+      z-index: 3;
+    }
+
+    /* NECK */
+    .neck {
+      width: 5px;
+      height: 5px;
+      background: #FFCC80;
+      border-radius: 2px;
+      margin-top: -1px;
+    }
+
+    /* TORSO */
+    .torso {
+      width: 22px;
+      height: 22px;
+      background: #FF7043;
+      border-radius: 6px 6px 3px 3px;
+      border: 2px solid #C9491E;
+      position: relative;
+      margin-top: -1px;
+    }
+
+    /* shirt stripe */
+    .torso::after {
+      content: '';
+      position: absolute;
+      top: 7px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #C9491E;
+      opacity: .5;
+    }
+
+    /* ARMS */
+    .arm {
+      position: absolute;
+      top: 1px;
+      width: 13px;
+      height: 5px;
+      background: #FF7043;
+      border-radius: 5px;
+      border: 1.5px solid #C9491E;
+    }
+
+    .arm.l {
+      right: calc(100% - 1px);
+      transform-origin: right center;
+      animation: waveL 0.9s ease-in-out infinite alternate;
+    }
+
+    .arm.r {
+      left: calc(100% - 1px);
+      transform-origin: left center;
+      animation: waveR 0.9s ease-in-out infinite alternate;
+    }
+
+    @keyframes waveL {
+      from {
+        transform: rotate(-55deg)
+      }
+
+      to {
+        transform: rotate(25deg)
+      }
+    }
+
+    @keyframes waveR {
+      from {
+        transform: rotate(55deg)
+      }
+
+      to {
+        transform: rotate(-25deg)
+      }
+    }
+
+    /* hands */
+    .arm::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      background: #FFCC80;
+      border-radius: 50%;
+      border: 1.5px solid #D97B3A;
+      transform: translateY(-50%);
+    }
+
+    .arm.l::after {
+      left: -5px
+    }
+
+    .arm.r::after {
+      right: -5px
+    }
+
+    /* HIPS */
+    .hips {
+      width: 20px;
+      height: 6px;
+      background: #37474F;
+      border-radius: 3px;
+      margin-top: 0;
+    }
+
+    /* LEGS — dangling */
+    .legs {
+      display: flex;
+      gap: 4px;
+      margin-top: 0
+    }
+
+    .leg {
+      width: 7px;
+      height: 24px;
+      background: #37474F;
+      border-radius: 3px;
+      transform-origin: top center;
+      position: relative;
+    }
+
+    .leg.l {
+      animation: dangL 1.3s ease-in-out infinite alternate
+    }
+
+    .leg.r {
+      animation: dangR 1.3s ease-in-out infinite alternate
+    }
+
+    @keyframes dangL {
+      from {
+        transform: rotate(-22deg)
+      }
+
+      to {
+        transform: rotate(22deg)
+      }
+    }
+
+    @keyframes dangR {
+      from {
+        transform: rotate(22deg)
+      }
+
+      to {
+        transform: rotate(-22deg)
+      }
+    }
+
+    /* shoes */
+    .leg::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: -4px;
+      width: 14px;
+      height: 7px;
+      background: #1A1A2E;
+      border-radius: 4px 5px 3px 3px;
+    }
+
+    /* ===== SPEECH BUBBLE ===== */
+    .bubble {
+      position: absolute;
+      top: 0;
+      left: calc(50% + 26px);
+      transform: translateY(-115%) translateX(6px);
+      background: #fff;
+      border: 2.5px solid #2B2B2B;
+      border-radius: 20px 20px 20px 5px;
+      padding: 11px 16px 10px;
+      min-width: 170px;
+      z-index: 40;
+      box-shadow: 3px 3px 0 #2B2B2B;
+      animation: bubblePop .6s cubic-bezier(.34, 1.56, .64, 1) 1.9s both,
+        bubbleFloat 2.8s ease-in-out 2.5s infinite;
+    }
+
+    @keyframes bubblePop {
+      from {
+        opacity: 0;
+        transform: translateY(-85%) translateX(6px) scale(.35)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(-115%) translateX(6px) scale(1)
+      }
+    }
+
+    @keyframes bubbleFloat {
+
+      0%,
+      100% {
+        transform: translateY(-115%) translateX(6px)
+      }
+
+      50% {
+        transform: translateY(-124%) translateX(6px)
+      }
+    }
+
+    .b-title {
+      font-size: clamp(12px, 1.4vw, 15px);
+      font-weight: 800;
+      color: #FF7043;
+      line-height: 1.3
+    }
+
+    .b-sub {
+      font-size: clamp(11px, 1.1vw, 13px);
+      font-weight: 600;
+      color: #999;
+      margin-top: 4px;
+      transition: opacity .2s
+    }
+
+    /* tail */
+    .bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 14px;
+      border: 6px solid transparent;
+      border-top: 12px solid #2B2B2B;
+    }
+
+    .bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 16px;
+      border: 5px solid transparent;
+      border-top: 9px solid #fff;
+    }
+
+    /* SUBTITLE */
+    .subtitle {
+      margin-top: clamp(18px, 3vw, 28px);
+      font-size: clamp(14px, 1.8vw, 19px);
+      color: #AAA;
+      font-weight: 700;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp .6s ease 2.2s forwards;
+    }
+
+    .subtitle b {
+      color: #FF7043
+    }
+
+    /* BUTTON */
+    .btn {
+      margin-top: clamp(14px, 2.5vw, 22px);
+      padding: 13px 36px;
+      background: #FF7043;
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(15px, 1.8vw, 18px);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #C9491E;
+      transition: transform .12s, box-shadow .12s;
+      text-decoration: none;
+      display: inline-block;
+      opacity: 0;
+      animation: fadeUp .6s ease 2.5s forwards;
+      letter-spacing: .5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 0 #C9491E
+    }
+
+    .btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #C9491E
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* PARTICLES */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: .8;
+        transform: translateY(0) rotate(0)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-105vh) rotate(600deg)
+      }
+    }
+
+    /* GROUND */
+    .ground {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: #F0E6DC;
+      border-top: 3px solid #DDD0C4;
+    }
+
+    /* decorative question marks */
+    .deco {
+      position: fixed;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(28px, 5vw, 56px);
+      opacity: .1;
+      pointer-events: none;
+      user-select: none;
+      animation: decoWiggle 5s ease-in-out infinite;
+    }
+
+    .deco.d2 {
+      animation-delay: -2s;
+      animation-duration: 4s
+    }
+
+    .deco.d3 {
+      animation-delay: -3.5s
+    }
+
+    @keyframes decoWiggle {
+
+      0%,
+      100% {
+        transform: rotate(-10deg)
+      }
+
+      50% {
+        transform: rotate(10deg)
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spin-ring"></div>
+  </div>
+
+  <!-- Decorative -->
+  <div class="deco" style="top:8%;left:4%;color:#FF7043">?</div>
+  <div class="deco d2" style="top:15%;right:6%;color:#FFB300">!</div>
+  <div class="deco d3" style="bottom:18%;left:10%;color:#42A5F5">?</div>
+  <div class="deco d2" style="bottom:22%;right:8%;color:#66BB6A">!</div>
+
+  <div class="ground"></div>
+
+  <div class="scene" id="scene">
+    <div class="row404">
+
+      <span class="digit">4</span>
+
+      <div class="zero-wrap">
+
+        <!-- Speech bubble -->
+        <div class="bubble">
+          <div class="b-title">It's a 404 Error! 🚨</div>
+          <div class="b-sub" id="bsub">Page not found 😅</div>
+        </div>
+
+        <!-- Man sitting ON TOP of the O -->
+        <div class="man">
+          <div class="head">
+            <div class="head-face">
+              <span class="eye l"></span>
+              <span class="eye r"></span>
+              <div class="smile"></div>
+            </div>
+          </div>
+          <div class="neck"></div>
+          <div class="torso">
+            <div class="arm l"></div>
+            <div class="arm r"></div>
+          </div>
+          <div class="hips"></div>
+          <div class="legs">
+            <div class="leg l"></div>
+            <div class="leg r"></div>
+          </div>
+        </div>
+
+        <!-- O ring (behind the man's legs) -->
+        <div class="zero-ring"></div>
+
+      </div>
+
+      <span class="digit">4</span>
+    </div>
+
+    <p class="subtitle">Oops! <b>Page not found.</b> Even our guy up there can't find it!</p>
+    <a class="btn" href="#">↩ Go Back Home</a>
+  </div>
+
+  <script>
+    /* loader */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('gone');
+        document.getElementById('scene').classList.add('show');
+      }, 800);
+    });
+    /* rotating sub-messages */
+    const msgs = [
+      "Page not found 😅",
+      "Did you get lost? 🗺️",
+      "Nothing here at all!",
+      "Check the URL? 🔍",
+      "I've waited so long…",
+      "Any doubt? Ask me! 🙋",
+      "It's gone. Bye! 👋",
+      "404 is my home now 🏠",
+    ];
+    let idx = 0;
+    const sub = document.getElementById('bsub');
+    sub.style.transition = 'opacity .22s';
+    setInterval(() => {
+      idx = (idx + 1) % msgs.length;
+      sub.style.opacity = '0';
+      setTimeout(() => {
+        sub.textContent = msgs[idx];
+        sub.style.opacity = '1';
+      }, 230);
+    }, 3200);
+    /* particles */
+    const cols = ['#FF7043', '#FFB300', '#66BB6A', '#42A5F5', '#AB47BC', '#EC407A'];
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const s = 4 + Math.random() * 8;
+      p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}vw;bottom:${-10 - Math.random()*40}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${7+Math.random()*9}s;animation-delay:${Math.random()*9}s;`;
+      document.body.appendChild(p);
+    }
+  </script>
+</body>
+
+</html>
+{% endblock %}  

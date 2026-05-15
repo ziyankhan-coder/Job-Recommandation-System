@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | JobRec{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Hero Header for Dashboard */
+    .dash-header {
+        background-color: #1a1a1a;
+        padding: 80px 20px 120px 20px;
+        margin-top: -20px;
+        text-align: center;
+        border-bottom-left-radius: 60px;
+        border-bottom-right-radius: 60px;
+    }
+
+    .dash-header h2 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 38px;
+        letter-spacing: -1.5px;
+        background: linear-gradient(to right, #ff8a00, #da1b60);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .overlap-container {
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Professional Startup Cards */
+    .profile-card {
+        background: #ffffff;
+        border-radius: 35px !important;
+        border: 1px solid rgba(255, 255, 255, 1) !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .info-box {
+        background-color: #fffafb;
+        border: 1px solid #f3f4f6;
+        border-radius: 20px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .info-box:hover {
+        border-color: #da1b60;
+        background-color: #ffffff;
+    }
+
+    .label-muted {
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #9ca3af;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0;
+    }
+
+    /* Skill Badges */
+    .skill-badge {
+        background: #f3f4f6;
+        color: #4b5563;
+        border-radius: 100px;
+        padding: 8px 18px;
+        font-weight: 600;
+        font-size: 13px;
+        display: inline-block;
+        margin: 0 8px 8px 0;
+        border: 1px solid #e5e7eb;
+    }
+
+    /* Job Card Styling */
+    .job-card-startup {
+        border-radius: 30px;
+        border: 2px solid transparent;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .job-card-startup:hover {
+        border-color: #da1b60;
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(218, 27, 96, 0.1);
+    }
+
+    .btn-pink-main {
+        background: #da1b60;
+        color: white !important;
+        padding: 12px 25px;
+        border-radius: 100px;
+        font-weight: 700;
+        border: none;
+        box-shadow: 0 10px 20px rgba(218, 27, 96, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .btn-pink-main:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+        box-shadow: 0 15px 25px rgba(218, 27, 96, 0.3);
+    }
+
+    .btn-outline-custom {
+        border: 2px solid #1a1a1a;
+        color: #1a1a1a;
+        padding: 10px 25px;
+        border-radius: 100px;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+
+    .btn-outline-custom:hover {
+        background: #1a1a1a;
+        color: white !important;
+    }
+</style>
+
+<div class="dash-header">
+    <div class="container">
+        <h2>{% if role == "recruiter" %}Recruiter Hub{% else %}Discovery Profile{% endif %}</h2>
+        <p class="text-white-50">Manage your presence and track your progress on JobRec.</p>
+    </div>
+</div>
+
+<div class="container overlap-container">
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card profile-card">
+                <div class="card-body p-4 p-md-5">
+
+                    {% if role == "recruiter" %}
+                        <!-- ===== RECRUITER VIEW ===== -->
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Company Name</span>
+                                    <h5 class="info-value">{{ company_name }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Industry</span>
+                                    <h5 class="info-value">{{ industry }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="info-box">
+                                    <span class="label-muted">Description</span>
+                                    <p class="mb-0 text-muted" style="font-size: 14px;">{{ company_description }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box text-center">
+                                    <span class="label-muted">Size</span>
+                                    <h5 class="info-value">{{ company_size }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box text-center">
+                                    <span class="label-muted">Headquarters</span>
+                                    <h5 class="info-value">{{ location }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box text-center">
+                                    <span class="label-muted">Founded</span>
+                                    <h5 class="info-value">{{ founded_year }}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <a href="{% url 'add_job' %}" class="btn-pink-main">
+                                + Post New Opportunity
+                            </a>
+                        </div>
+
+                    {% else %}
+                        <!-- ===== CANDIDATE VIEW ===== -->
+                        <div class="mb-4 text-center">
+                            <h4 class="fw-bold mb-4" style="font-family: 'Plus Jakarta Sans', sans-serif;">Skills & Expertise</h4>
+                            <div class="d-flex flex-wrap justify-content-center">
+                                {% for skill in skills %}
+                                    <span class="skill-badge">{{ skill }}</span>
+                                {% empty %}
+                                    <span class="text-muted italic">No skills listed yet</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Education</span>
+                                    <h6 class="info-value">{{ education }}</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Experience</span>
+                                    <h6 class="info-value">{{ experience_years }} Years</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Preferred Location</span>
+                                    <h6 class="info-value">{{ preferred_location }}</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <span class="label-muted">Job Type</span>
+                                    <h6 class="info-value">{{ preferred_job_type }}</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <a href="{% url 'update_profile' %}" class="btn-outline-custom">
+                                Edit My Profile
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.user_type == "recruiter" %}
+<!-- ===== POSTED JOBS SECTION ===== -->
+<div class="container mt-5 pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+        <h3 class="fw-bold" style="font-family: 'Plus Jakarta Sans', sans-serif;">Your Open Roles</h3>
+        <span class="badge bg-dark rounded-pill px-3 py-2">{{ jobs_posted|length }} Active</span>
+    </div>
+
+    {% if jobs_posted %}
+        <div class="row g-4">
+            {% for job in jobs_posted %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm job-card-startup">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="fw-bold mb-1" style="color: #1a1a1a;">{{ job.title }}</h5>
+                            <p class="text-muted small mb-3">📍 {{ job.location }}</p>
+
+                            <p class="text-muted small flex-grow-1">
+                                {{ job.description|truncatewords:18 }}
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span style="color: #16a34a; font-weight: 700;">💰 {{ job.salary }}</span>
+                                <small class="text-muted" style="font-size: 11px;">{{ job.created_at|date:"M d" }}</small>
+                            </div>
+
+                            <div class="mt-4 d-flex gap-2">
+                                <a href="{% url 'job_analysis' job.id %}" class="btn btn-light rounded-pill flex-grow-1 fw-bold text-dark border" style="font-size: 12px;">
+                                    View Job
+                                </a>
+                                <a href="{% url 'status_analysis' job.id %}" class="btn-pink-main flex-grow-1 text-center" style="font-size: 12px; padding: 10px;">
+                                    Applicants
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center p-5 bg-white rounded-5 border-2 border-dashed mt-3">
+            <h5 class="text-muted">You haven't posted any jobs yet.</h5>
+            <a href="{% url 'add_job' %}" class="text-decoration-none fw-bold" style="color: #da1b60;">Start hiring now &rarr;</a>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
