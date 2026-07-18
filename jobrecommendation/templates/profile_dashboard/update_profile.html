@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.form-card {
+    border-radius: 16px;
+    border: 1px solid #e2e8f0 !important;
+    background: #ffffff;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    padding: 10px 14px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.btn-custom {
+    border-radius: 8px;
+    padding: 10px 30px;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: #2563eb;
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #1d4ed8;
+}
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card form-card shadow-sm p-4 p-md-5">
+
+                <h3 class="text-center fw-bold mb-4" style="font-family: 'Plus Jakarta Sans', sans-serif; color: #0f172a;">
+                    Update Profile Details
+                </h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if request.user.user_type == 'jobseeker' %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Skills</label>
+                            <input type="text" class="form-control" name="skills" value="{{ profile.skills }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Experience (Years)</label>
+                            <input type="number" class="form-control" name="experience_years" value="{{ profile.experience_years }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Preferred Location</label>
+                            <input type="text" class="form-control" name="preferred_location" value="{{ profile.preferred_location }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Job Type</label>
+                            <input type="text" class="form-control" name="preferred_job_type" value="{{ profile.preferred_job_type }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Education</label>
+                            <input type="text" class="form-control" name="education" value="{{ profile.education }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-control" name="role" value="{{ profile.role }}">
+                        </div>
+                    </div>
+
+                    {% elif request.user.user_type == 'recruiter' %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" class="form-control" name="company_name" value="{{ company.name }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Website</label>
+                            <input type="text" class="form-control" name="company_website" value="{{ company.website }}">
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3" name="company_description">{{ company.description }}</textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Industry</label>
+                            <input type="text" class="form-control" name="industry" value="{{ company.industry }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Company Size</label>
+                            <input type="text" class="form-control" name="company_size" value="{{ company.company_size }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location" value="{{ company.location }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Founded Year</label>
+                            <input type="number" class="form-control" name="founded_year" value="{{ company.founded_year }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-control" name="role" value="{{ company.role }}">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-custom text-white">
+                            Save Changes
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

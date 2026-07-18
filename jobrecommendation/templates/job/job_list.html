@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% block title %}Jobs | JobRec{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-header-flat {
+        background-color: #0f172a;
+        padding: 60px 20px 100px 20px;
+        margin-top: -20px;
+        text-align: center;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+    .overlap-filter {
+        margin-top: -60px;
+        position: relative;
+        z-index: 10;
+    }
+    .search-card {
+        background: #FFFFFF;
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
+    }
+    .form-control-tech {
+        border-radius: 8px;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid #cbd5e1;
+        font-size: 14px;
+    }
+    .form-control-tech:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+    .input-icon-wrapper {
+        position: relative;
+    }
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        z-index: 10;
+        fill: #64748b;
+    }
+    .job-card-flat {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #ffffff;
+        transition: all 0.2s ease-in-out;
+    }
+    .job-card-flat:hover {
+        border-color: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px -8px rgba(37, 99, 235, 0.15);
+    }
+    .btn-search-apply {
+        background-color: #2563eb;
+        color: white !important;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+    }
+    .btn-search-apply:hover {
+        background-color: #1d4ed8;
+    }
+    #suggestions {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        top: calc(100% + 4px);
+    }
+    .suggestion-item {
+        padding: 10px 16px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .suggestion-item:hover {
+        background-color: #f1f5f9;
+        color: #2563eb;
+    }
+</style>
+
+<div class="page-header-flat">
+    <div class="container">
+        <h1 class="fw-bold text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif;">Explore Opportunities</h1>
+        <p class="text-white-50 small mx-auto" style="max-width: 500px;">Find the perfect roles tailored to your unique technical skills.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Search / Filter Card -->
+    <div class="card search-card overlap-filter mb-5 shadow-sm">
+        <div class="card-body p-4">
+            <form method="GET" class="row g-3 align-items-center">
+
+                <div class="col-md-4 input-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="input-icon" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ request.GET.q }}"
+                        class="form-control form-control-tech"
+                        placeholder="Search job title or skills..."
+                        autocomplete="off"
+                        id="input-search"
+                    >
+                    <ul id="suggestions" class="list-group position-absolute w-100 mt-1 d-none"></ul>
+                </div>
+
+                <div class="col-md-3 input-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="input-icon" viewBox="0 0 16 16"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/><path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ request.GET.location }}"
+                        class="form-control form-control-tech"
+                        placeholder="City or remote"
+                    >
+                </div>
+
+                <div class="col-md-3 input-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="input-icon" viewBox="0 0 16 16"><path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.265-1.608-.666-1.608-1.201 0-.713.558-1.236 1.608-1.336v2.537zm1.566 2.408c1.096.29 1.683.69 1.683 1.25 0 .82-.67 1.34-1.683 1.42v-2.67z"/></svg>
+                    <input
+                        type="number"
+                        name="min_salary"
+                        value="{{ request.GET.min_salary }}"
+                        class="form-control form-control-tech"
+                        placeholder="Min Salary"
+                    >
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-search-apply py-2 shadow-sm">
+                        Filters
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Jobs Grid Layout -->
+    {% if jobs %}
+        <div class="row g-4 mb-5">
+            {% for job in jobs %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card-flat h-100 p-3 shadow-sm">
+                        <div class="card-body d-flex flex-column">
+
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="fw-bold mb-0" style="font-family: 'Plus Jakarta Sans', sans-serif; color: #0f172a;">
+                                    {{ job.title }}
+                                </h5>
+                                <span class="badge" style="background: #e2e8f0; color: #334155; font-size: 11px; border-radius: 4px;">
+                                    {{ job.job_type|default:"Full Time" }}
+                                </span>
+                            </div>
+
+                            <div class="mb-3 small">
+                                <p class="mb-1 fw-semibold text-secondary">
+                                    🏢 {{ job.company.name }}
+                                </p>
+                                <p class="text-muted mb-0">
+                                    📍 {{ job.location }}
+                                </p>
+                            </div>
+
+                            <p class="text-muted small mb-4 flex-grow-1" style="line-height: 1.6;">
+                                {{ job.description|truncatewords:15 }}
+                            </p>
+
+                            <div class="mt-auto d-flex gap-2">
+                                <a href="{% url 'apply_job' job.id %}" 
+                                   class="btn btn-search-apply w-50 text-center small py-2" style="font-size: 13px;">
+                                    Apply Now
+                                </a>
+                                <a href="{% url 'job_analysis' job.id %}" 
+                                   class="btn btn-outline-secondary w-50 text-center small py-2" style="border-radius: 8px; font-weight: 600; font-size: 13px;">
+                                    Details
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="row justify-content-center mt-5 mb-5">
+            <div class="col-md-6 text-center">
+                <div class="card border-0 shadow-sm p-5" style="border-radius: 12px; border: 1px solid #e2e8f0 !important;">
+                    <div class="mb-3" style="font-size: 35px;">🔍</div>
+                    <h5 class="fw-bold text-dark mb-2">No positions found</h5>
+                    <p class="text-muted small mb-4">We couldn't find any positions matching your criteria. Try adjusting your fields.</p>
+                    <a href="{% url 'job_list' %}" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 8px; font-weight: 600; font-size: 14px;">Clear Filters</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- Ajax Search AutoSuggestion script remains intact as requested -->
+<script>
+let input = document.getElementById('input-search');
+let suggestions = document.getElementById('suggestions');
+
+input.addEventListener("input", async () => {
+    const query = input.value.trim();
+    if (query.length < 2) {
+        suggestions.innerHTML = "";
+        suggestions.classList.add("d-none"); 
+        return;
+    }
+    try {
+        const response = await fetch(`/job/search/?q=${query}`);
+        const data = await response.json();
+        suggestions.innerHTML = "";
+        if(data.length > 0) {
+            suggestions.classList.remove("d-none");
+            data.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "list-group-item border-0 suggestion-item";
+                li.textContent = item;
+                li.onclick = () => {
+                    input.value = item;
+                    suggestions.innerHTML = "";
+                    suggestions.classList.add("d-none");
+                };
+                suggestions.appendChild(li);
+            });
+        } else {
+            suggestions.classList.add("d-none");
+        }
+    } catch (err) {
+        console.error("Search error", err);
+    }
+});
+
+document.addEventListener('click', function(event) {
+    if (!input.contains(event.target) && !suggestions.contains(event.target)) {
+        suggestions.innerHTML = "";
+        suggestions.classList.add("d-none");
+    }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block title %}Post Job | JobRec{% endblock %}
+
+{% block content %}
+
+<style>
+    .form-card {
+        border-radius: 12px;
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff;
+    }
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .skill-box {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: #f8fafc;
+        max-height: 280px;
+        overflow-y: auto;
+    }
+    .skill-item {
+        font-size: 14px;
+        color: #334155;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .skill-item input {
+        cursor: pointer;
+    }
+    .btn-submit {
+        background-color: #2563eb;
+        color: white !important;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px;
+        border: none;
+        transition: background 0.2s;
+    }
+    .btn-submit:hover {
+        background-color: #1d4ed8;
+    }
+</style>
+
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-lg-8">
+
+        <div class="card form-card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <h3 class="fw-bold" style="font-family: 'Plus Jakarta Sans', sans-serif; color: #0f172a;">Post a New Job</h3>
+                    <p class="text-muted small">Reach the right candidates with a clear job listing</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} py-2 text-center small">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- Job Title -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold small text-secondary">Job Title</label>
+                        <input type="text" name="title" class="form-control"
+                               placeholder="e.g. Python Developer" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold small text-secondary">Job Description</label>
+                        <textarea name="description" class="form-control"
+                                  rows="5"
+                                  placeholder="Describe responsibilities, tech stack, expectations"
+                                  required></textarea>
+                    </div>
+
+                    <!-- ===== SKILLS SECTION ===== -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold small text-secondary">Required Skills</label>
+
+                        <!-- Search -->
+                        <input type="text" id="skillSearch"
+                               class="form-control mb-3"
+                               placeholder="🔍 Search skills...">
+
+                        <div class="skill-box">
+
+                            <!-- Programming -->
+                            <h6 class="fw-bold mb-3" style="color: #2563eb; font-size: 13px; text-transform: uppercase;">Programming</h6>
+                            <div class="row skill-section mb-3">
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Python"> Python</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Java"> Java</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="C++"> C++</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="JavaScript"> JavaScript</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Go"> Go</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Rust"> Rust</div>
+                            </div>
+
+                            <hr style="border-color: #cbd5e1;">
+
+                            <!-- Web -->
+                            <h6 class="fw-bold mb-3" style="color: #2563eb; font-size: 13px; text-transform: uppercase;">Web Development</h6>
+                            <div class="row skill-section mb-3">
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="HTML"> HTML</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="CSS"> CSS</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="React"> React</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Django"> Django</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="Node.js"> Node.js</div>
+                            </div>
+
+                            <hr style="border-color: #cbd5e1;">
+
+                            <!-- Database -->
+                            <h6 class="fw-bold mb-3" style="color: #2563eb; font-size: 13px; text-transform: uppercase;">Database</h6>
+                            <div class="row skill-section">
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="MySQL"> MySQL</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="MongoDB"> MongoDB</div>
+                                <div class="col-6 col-md-4 skill-item"><input type="checkbox" name="skills" value="PostgreSQL"> PostgreSQL</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ===== DETAILS ===== -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-semibold small text-secondary">Job Location</label>
+                            <input type="text" name="location" class="form-control"
+                                   placeholder="Delhi / Remote" required>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-semibold small text-secondary">Job Type</label>
+                            <select name="job_type" class="form-select" required>
+                                <option value="">Select type</option>
+                                <option value="full_time">Full Time</option>
+                                <option value="part_time">Part Time</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold small text-secondary">Salary (Optional)</label>
+                        <input type="text" name="salary" class="form-control"
+                               placeholder="e.g. ₹5–10 LPA">
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-submit">
+                            Post Job Opening
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Search Script -->
+<script>
+    const searchInput = document.getElementById("skillSearch");
+    const skills = document.querySelectorAll(".skill-item");
+
+    searchInput.addEventListener("keyup", function () {
+        const filter = searchInput.value.toLowerCase();
+
+        skills.forEach(skill => {
+            const text = skill.innerText.toLowerCase();
+            skill.style.display = text.includes(filter) ? "flex" : "none";
+        });
+    });
+</script>
+
+{% endblock %}
