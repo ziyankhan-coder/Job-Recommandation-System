@@ -14,9 +14,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '../.env'))
 # ... baaki ka saara code iske niche chalta rahega ...
 
 # Ab settings.py mein jahan SECRET_KEY hai, use bhi safe kar lo:
-SECRET_KEY = env('SECRET_KEY', default='django-insecure-your-fallback-key')
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-fallback-key')
 DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.5']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,8 +34,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # <-- CORS Middleware yahan aayega
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- Yeh line yahan add karo
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # <-- CORS Middleware yahan aayega
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -83,9 +84,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 import os
-
 STATIC_URL = '/static/'
-
 # Yeh line ensure karegi ki local development mein Django ko static files milen
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
@@ -93,3 +92,4 @@ STATICFILES_DIRS = [
 
 # Yeh collectstatic files store karne ke liye hai
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
