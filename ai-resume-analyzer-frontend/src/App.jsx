@@ -47,8 +47,8 @@ function App() {
     formData.append('pdf', file);
 
     try {
-      // This sends the PDF to your Django backend
-      const response = await fetch('http://127.0.0.1:8000/api/analyze/', {
+      // Now this sends the PDF directly to your live production server on Render
+      const response = await fetch('https://job-recommandation-system.onrender.com/api/analyze/', {
         method: 'POST',
         body: formData,
       });
