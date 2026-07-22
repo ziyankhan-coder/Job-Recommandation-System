@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 import environ
-
+import dj_database_url
 # Django ka default BASE_DIR pehle se bana hoga, ise wahi rehne do:
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -61,11 +61,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jobrecommendation.wsgi.application'
 
+# DATABASES configuration
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 AUTH_USER_MODEL = 'account.User'
