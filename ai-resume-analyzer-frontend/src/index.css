@@ -1,39 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
-
 :root {
-  --primary: #4f46e5;
-  --primary-glow: rgba(79, 70, 229, 0.4);
+  --primary: #6366f1; /* Indigo accent */
+  --primary-glow: rgba(99, 102, 241, 0.35);
   --secondary: #ec4899;
-  --bg-gradient-start: #f8fafc;
-  --bg-gradient-end: #e2e8f0;
-  --surface: rgba(255, 255, 255, 0.7);
-  --surface-border: rgba(255, 255, 255, 0.5);
   
-  --text-main: #0f172a;
-  --text-muted: #64748b;
+  /* Dark Glassmorphism Values */
+  --bg-gradient-start: #0f172a;
+  --bg-gradient-end: #020617;
+  --surface: rgba(30, 41, 59, 0.7);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
   
   --success: #10b981;
-  --success-bg: #d1fae5;
+  --success-bg: rgba(16, 185, 129, 0.15);
   --danger: #ef4444;
-  --danger-bg: #fee2e2;
+  --danger-bg: rgba(239, 68, 68, 0.15);
   --warning: #f59e0b;
-  --warning-bg: #fef3c7;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  --warning-bg: rgba(245, 158, 11, 0.15);
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); /* Deep Dark Palette */
   background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
 }
+
 
 h1, h2, h3, h4 {
   font-family: 'Outfit', sans-serif;
@@ -104,19 +100,13 @@ h1, h2, h3, h4 {
 
 /* Upload Zone */
 .upload-zone {
-  border: 2px dashed rgba(79, 70, 229, 0.3);
-  border-radius: 1.5rem;
-  padding: 4rem 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.5);
-  position: relative;
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  background: rgba(15, 23, 42, 0.6);
 }
 
 .upload-zone:hover, .upload-zone.active {
   border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(30, 41, 59, 0.8);
   box-shadow: 0 0 20px var(--primary-glow);
 }
 

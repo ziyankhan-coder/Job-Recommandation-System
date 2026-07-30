@@ -85,7 +85,33 @@ function App() {
           <Star className="icon-success" fill="currentColor" />
           <span className="gradient-text">ResumeAI</span>
         </div>
-        <button className="btn" style={{padding: '0.5rem 1rem', fontSize: '0.9rem'}} onClick={() => window.open('https://github.com', '_blank')}>View Docs</button>
+        
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          {/* Django Main Site Link */}
+          <a 
+            href="https://job-recommandation-system.onrender.com/" 
+            style={{
+              textDecoration: 'none',
+              color: 'var(--text-main)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '999px',
+              border: '1px solid var(--surface-border)',
+              background: 'rgba(255, 255, 255, 0.2)'
+            }}
+          >
+            ← Back to Portal
+          </a>
+
+          <button 
+            className="btn" 
+            style={{padding: '0.5rem 1rem', fontSize: '0.9rem'}} 
+            onClick={() => window.open('https://github.com', '_blank')}
+          >
+            View Docs
+          </button>
+        </div>
       </nav>
 
       <div className="main-container">
