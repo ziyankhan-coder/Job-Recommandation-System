@@ -234,6 +234,242 @@
 </style>
 
 <!-- HERO AREA -->
+{% extends 'base.html' %}
+
+{% block title %}Home | JobRec{% endblock %}
+
+{% block content %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+    :root {
+        /* Professional Tech Theme Palette */
+        --primary-color: #2563eb;       /* Modern Tech Blue */
+        --primary-hover: #1d4ed8;       /* Darker Blue for hover states */
+        --hero-bg: #0f172a;            /* Deep Slate Navy (Professional Dark) */
+        --page-bg: #f8fafc;            /* Clean Premium Gray-White */
+        --card-bg: #ffffff;            /* Pure White for crisp cards */
+        --ink: #0f172a;                /* Dark Charcoal for text readability */
+        --ink-muted: #64748b;          /* Professional Cool Muted Gray */
+        --border-color: #e2e8f0;       /* Light border for crisp separation */
+        --success-bg: #f0fdf4;
+        --success-text: #16a34a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background-color: var(--page-bg);
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+        line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       HERO SECTION (Slate Clean Look)
+    ══════════════════════════════ */
+    .hero {
+        background-color: var(--hero-bg);
+        color: white;
+        padding: 100px 20px 140px;
+        text-align: center;
+        border-bottom-left-radius: 24px; /* Soft corporate curves instead of aggressive 60px */
+        border-bottom-right-radius: 24px;
+        position: relative;
+    }
+
+    .hero h1 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: clamp(36px, 5vw, 52px);
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        margin-bottom: 20px;
+        color: #ffffff; /* Clean solid white title */
+    }
+
+    .hero h1 span {
+        color: #60a5fa; /* Soft tech-blue highlight */
+    }
+
+    .hero p {
+        font-size: 18px;
+        color: #94a3b8;
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+
+    /* ══════════════════════════════
+       USER SUMMARY CARD
+    ══════════════════════════════ */
+    .user-wrap {
+        max-width: 1000px;
+        margin: -80px auto 60px; 
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .user-card {
+        background: var(--card-bg);
+        border-radius: 16px; /* Professional standard curve */
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
+        border: 1px solid var(--border-color);
+    }
+
+    .hi-text {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .hi-name { color: var(--primary-color); }
+
+    /* ══════════════════════════════
+       JOBS LISTING
+    ══════════════════════════════ */
+    .jobs-container {
+        max-width: 1000px;
+        margin: 0 auto 100px;
+        padding: 0 20px;
+    }
+
+    .section-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        letter-spacing: -0.5px;
+    }
+
+    /* Clean Horizontal Card Layout */
+    .job-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: 64px 1fr 180px;
+        align-items: center;
+        gap: 24px;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .job-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 12px 20px -8px rgba(37, 99, 235, 0.15);
+        transform: translateY(-2px); /* Subtled animation for professional feel */
+    }
+
+    .company-logo {
+        width: 64px; height: 64px;
+        border-radius: 12px;
+        background: #f1f5f9;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px;
+        border: 1px solid var(--border-color);
+    }
+
+    .job-info h2 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--ink);
+    }
+
+    .job-meta-row {
+        display: flex;
+        gap: 15px;
+        color: var(--ink-muted);
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .type-badge {
+        background: var(--success-bg);
+        color: var(--success-text);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 11px;
+        margin-left: 8px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Match Score Styling */
+    .score-box {
+        text-align: center;
+        border-left: 1px solid var(--border-color);
+        padding-left: 20px;
+    }
+
+    .score-percent {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .score-lbl {
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--ink-muted);
+        letter-spacing: 0.5px;
+    }
+
+    /* Buttons (Clean Solid Look) */
+    .btn-main {
+        background: var(--primary-color);
+        color: white !important;
+        padding: 10px 22px;
+        border-radius: 8px; /* Square/slightly rounded corners for standard UI instead of pill shapes */
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-block;
+        border: none;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .btn-main:hover {
+        background: var(--primary-hover);
+        cursor: pointer;
+    }
+
+    .btn-outline {
+        background: white;
+        border: 1px solid #cbd5e1;
+        color: var(--ink) !important;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .job-card { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+        .score-box { border-left: none; border-top: 1px solid var(--border-color); padding: 20px 0 0; width: 100%; }
+    }
+</style>
+
+<!-- HERO AREA -->
 <section class="hero">
     <h1>Your <span>AI Future</span> Starts Here</h1>
     <p>We've analyzed the market to find your perfect job matches based on data analytics.</p>
@@ -300,4 +536,136 @@
     {% endif %}
 </div>
 
+{% endblock %}
+<!-- USER WELCOME -->
+<!-- USER WELCOME -->
+<div class="user-wrap">
+    <div class="user-card">
+        {% if user.is_authenticated %}
+            <h2 class="hi-text">Welcome back, <span class="hi-name">{{ user.username }}</span> 👋</h2>
+            <p style="color: var(--ink-muted);">You're logged in as a <strong>{{ user.user_type|title }}</strong></p>
+        {% else %}
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; text-align: left;">
+                <div>
+                    <span style="background: #e0e7ff; color: #4338ca; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">
+                        👀 Guest / Recruiter Mode
+                    </span>
+                    <h2 class="hi-text" style="margin-top: 8px;">Explore Live AI Match Preview</h2>
+                    <p style="color: var(--ink-muted); margin: 0;">Showing sample high-compatibility jobs generated by our ML Engine.</p>
+                </div>
+                <div>
+                    <a href="{% url 'login' %}" class="btn-main">Login / Sign Up</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- JOBS SECTION -->
+<!-- JOBS SECTION -->
+<div class="jobs-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 class="section-title">
+            {% if user.is_authenticated %}Recommended for You{% else %}🔥 Live AI Recommendations Demo{% endif %}
+        </h2>
+        <span style="font-weight: 600; color: var(--primary-color);">AI Matching Engine v2.0 Active</span>
+    </div>
+
+    {% if user.is_authenticated and jobs %}
+        {# REAL DATABASE JOBS (Logged in users) #}
+        {% for items in jobs %}
+            <div class="job-card">
+                <div class="company-logo">🏢</div>
+                <div class="job-info">
+                    <h2>{{ items.job.title }} <span class="type-badge">{{ items.job.job_type|default:"Full Time" }}</span></h2>
+                    <div class="job-meta-row">
+                        <span>💼 {{ items.job.company.name }}</span>
+                        <span>📍 {{ items.job.location }}</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <a href="{% url 'apply_job' items.job.id %}" class="btn-main" style="padding: 6px 16px; font-size: 13px;">Apply Now</a>
+                        <a href="{% url 'job_analysis' items.job.id %}" class="btn-outline" style="padding: 5px 16px; font-size: 13px;">Details</a>
+                    </div>
+                </div>
+                <div class="score-box">
+                    <span class="score-lbl">Compatibility</span>
+                    <span class="score-percent">{{ items.match_percentage }}%</span>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        {# DEMO CARDS FOR RECRUITER (When NOT logged in) #}
+        
+        <!-- Demo Job 1 -->
+        <div class="job-card">
+            <div class="company-logo" style="background: #eff6ff; color: #2563eb;">🚀</div>
+            <div class="job-info">
+                <h2>Senior Python / AI Developer <span class="type-badge">Remote</span></h2>
+                <div class="job-meta-row">
+                    <span>💼 TechCorp Solutions</span>
+                    <span>📍 Bangalore, KA</span>
+                    <span>💰 $80k - $120k</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="https://ai-resume-analyzer-frontend-five.vercel.app/" target="_blank" class="btn-main" style="padding: 6px 16px; font-size: 13px;">
+                        📄 Try Resume Analyzer
+                    </a>
+                    <span style="font-size: 12px; color: var(--ink-muted);">Matched with TF-IDF Vectorization</span>
+                </div>
+            </div>
+            <div class="score-box">
+                <span class="score-lbl">AI Match Score</span>
+                <span class="score-percent" style="color: #16a34a;">96%</span>
+            </div>
+        </div>
+
+        <!-- Demo Job 2 -->
+        <div class="job-card">
+            <div class="company-logo" style="background: #fdf2f8; color: #db2777;">💻</div>
+            <div class="job-info">
+                <h2>Full Stack Software Engineer <span class="type-badge">Full Time</span></h2>
+                <div class="job-meta-row">
+                    <span>💼 InnovateX Systems</span>
+                    <span>📍 Remote</span>
+                    <span>💰 $65k - $90k</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="https://ai-resume-analyzer-frontend-five.vercel.app/" target="_blank" class="btn-main" style="padding: 6px 16px; font-size: 13px;">
+                        📄 Test Resume Fit
+                    </a>
+                    <span style="font-size: 12px; color: var(--ink-muted);">Django + React Stack</span>
+                </div>
+            </div>
+            <div class="score-box">
+                <span class="score-lbl">AI Match Score</span>
+                <span class="score-percent" style="color: #2563eb;">88%</span>
+            </div>
+        </div>
+
+        <!-- Demo Job 3 -->
+        <div class="job-card">
+            <div class="company-logo" style="background: #f0fdf4; color: #16a34a;">📊</div>
+            <div class="job-info">
+                <h2>Data Analyst / ML Engineer <span class="type-badge">Hybrid</span></h2>
+                <div class="job-meta-row">
+                    <span>💼 DataDynamics</span>
+                    <span>📍 Pune, MH</span>
+                    <span>💰 $70k - $95k</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="https://ai-resume-analyzer-frontend-five.vercel.app/" target="_blank" class="btn-main" style="padding: 6px 16px; font-size: 13px;">
+                        📄 Analyze Resume
+                    </a>
+                    <span style="font-size: 12px; color: var(--ink-muted);">NLP Keyword Extractor</span>
+                </div>
+            </div>
+            <div class="score-box">
+                <span class="score-lbl">AI Match Score</span>
+                <span class="score-percent" style="color: #ca8a04;">82%</span>
+            </div>
+        </div>
+
+    {% endif %}
+</div>
 {% endblock %}
