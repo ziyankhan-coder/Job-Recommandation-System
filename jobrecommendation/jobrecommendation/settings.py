@@ -80,11 +80,10 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # React runs on port 5173 by default
-CORS_ALLOWED_ORIGINS = [
-    '*', 'job-recommandation-system-dsv6.onrender.com',
-    "http://localhost:5173",  # Local testing ke liye
-    "http://127.0.0.1:5173",
-]
+# Purana CORS settings hata kar sirf yeh do lines rakhein:
+CORS_ALLOW_ALL_ORIGINS = True
+
+ALLOWED_HOSTS = ['*', 'job-recommandation-system-dsv6.onrender.com', 'localhost', '127.0.0.1']
 import os
 STATIC_URL = '/static/'
 # Yeh line ensure karegi ki local development mein Django ko static files milen
