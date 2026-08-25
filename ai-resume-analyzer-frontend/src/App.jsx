@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadCloud, FileText, CheckCircle, XCircle, AlertCircle, BarChart3, Star, X, User, BookOpen, Wrench } from 'lucide-react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
 import './index.css';
 
 function App() {
@@ -10,6 +10,8 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState(null);
   const fileInputRef = useRef(null);
+
+  const BACKEND_URL = "https://job-recommandation-system-dsv6.onrender.com";
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ function App() {
       setFile(selectedFile);
       setResults(null);
     } else {
-      alert('Please upload a PDF file.');
+      alert('Please upload a valid PDF file.');
     }
   };
 
@@ -42,13 +44,11 @@ function App() {
     if (!file) return;
 
     setIsAnalyzing(true);
-
     const formData = new FormData();
     formData.append('pdf', file);
 
     try {
-      // Now this sends the PDF directly to your live production server on Render
-      const response = await fetch('https://job-recommandation-system.onrender.com/api/analyze/', {
+      const response = await fetch(`${BACKEND_URL}/api/analyze/`, {
         method: 'POST',
         body: formData,
       });
@@ -58,17 +58,16 @@ function App() {
       if (response.ok) {
         setResults(data);
       } else {
-        alert("Error from backend: " + data.error);
+        alert("Error from backend: " + (data.error || "Unable to parse resume."));
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert("Could not connect to the backend server. Is Django running?");
+      alert("Could not connect to the backend server. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  // Animation variants
   const containerVars = {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -87,9 +86,8 @@ function App() {
         </div>
         
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          {/* Django Main Site Link */}
           <a 
-            href="https://job-recommandation-system.onrender.com/" 
+            href={BACKEND_URL} 
             style={{
               textDecoration: 'none',
               color: 'var(--text-main)',
@@ -137,30 +135,29 @@ function App() {
               style={{ padding: '3rem', marginTop: '2rem', maxWidth: '800px', margin: '2rem auto' }}
             >
               <label 
-  className={`upload-zone ${isDragging ? 'active' : ''}`}
-  onDragOver={handleDragOver}
-  onDragLeave={handleDragLeave}
-  onDrop={handleDrop}
-  style={{ display: 'block' }}
->
-  <div className="upload-icon-wrapper">
-    <UploadCloud size={40} />
-  </div>
-  <h2>Click to Upload or Drag & Drop</h2>
-  <p style={{ marginTop: '0.5rem' }}>Supports PDF up to 5MB</p>
-  {(e) => handleFileInput(e)}
-<input 
-  type="file" 
-  ref={fileInputRef} 
-  onChange={(e) => {
-    if (e.target.files && e.target.files[0]) {
-      handleFileSelection(e.target.files[0]);
-    }
-  }} 
-  accept="application/pdf"
-  style={{ display: 'none' }}
-/>
-</label>
+                className={`upload-zone ${isDragging ? 'active' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                style={{ display: 'block', cursor: 'pointer' }}
+              >
+                <div className="upload-icon-wrapper">
+                  <UploadCloud size={40} />
+                </div>
+                <h2>Click to Upload or Drag & Drop</h2>
+                <p style={{ marginTop: '0.5rem' }}>Supports PDF up to 5MB</p>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleFileSelection(e.target.files[0]);
+                    }
+                  }} 
+                  accept="application/pdf"
+                  style={{ display: 'none' }}
+                />
+              </label>
 
               {file && (
                 <motion.div 
@@ -176,7 +173,10 @@ function App() {
                   <X 
                     color="var(--text-muted)" 
                     style={{ cursor: 'pointer' }} 
-                    onClick={() => { setFile(null); fileInputRef.current.value = ''; }} 
+                    onClick={() => { 
+                      setFile(null); 
+                      if (fileInputRef.current) fileInputRef.current.value = ''; 
+                    }} 
                   />
                 </motion.div>
               )}
@@ -218,40 +218,42 @@ function App() {
               </motion.div>
 
               {/* Candidate Profile Details */}
-              <motion.div variants={itemVars} className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem' }}>
-                <div className="card-header">
-                  <User className="icon-success" />
-                  <h2>Candidate Profile</h2>
-                </div>
-                <div className="dashboard-grid" style={{ marginTop: 0, gap: '1rem' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div>
-                      <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Full Name</h4>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
-                        <User size={20} className="icon-success" />
-                        {results.personalDetails.name}
+              {results.personalDetails && (
+                <motion.div variants={itemVars} className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem' }}>
+                  <div className="card-header">
+                    <User className="icon-success" />
+                    <h2>Candidate Profile</h2>
+                  </div>
+                  <div className="dashboard-grid" style={{ marginTop: 0, gap: '1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <div>
+                        <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Full Name</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
+                          <User size={20} className="icon-success" />
+                          {results.personalDetails.name || 'Candidate'}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Education</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
+                          <BookOpen size={20} className="icon-warning" />
+                          {results.personalDetails.education || 'N/A'}
+                        </div>
                       </div>
                     </div>
                     <div>
-                      <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Education</h4>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
-                        <BookOpen size={20} className="icon-warning" />
-                        {results.personalDetails.education}
+                      <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Top Extracted Skills</h4>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        {(results.personalDetails.topSkills || []).map((skill, idx) => (
+                          <span key={idx} className="chip" style={{ background: '#eff6ff', color: '#3b82f6', border: '1px solid #bfdbfe' }}>
+                            <Wrench size={14} style={{ marginRight: '0.25rem' }} /> {skill}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <h4 style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Top Extracted Skills</h4>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      {results.personalDetails.topSkills.map((skill, idx) => (
-                        <span key={idx} className="chip" style={{ background: '#eff6ff', color: '#3b82f6', border: '1px solid #bfdbfe' }}>
-                          <Wrench size={14} style={{ marginRight: '0.25rem' }} /> {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              )}
 
               {/* Top Metrics */}
               <div className="dashboard-grid" style={{ marginBottom: '2rem' }}>
@@ -261,7 +263,7 @@ function App() {
                     <h2>Overall Score</h2>
                   </div>
                   <div className="score-display">
-                    <div className="score-number">{results.score}</div>
+                    <div className="score-number">{results.score || 0}</div>
                     <p>Out of 100</p>
                   </div>
                 </motion.div>
@@ -273,12 +275,12 @@ function App() {
                   </div>
                   <div className="score-display">
                     <div className="score-number" style={{ background: 'linear-gradient(135deg, #10b981, #3b82f6)', WebkitBackgroundClip: 'text' }}>
-                      {results.atsScore}%
+                      {results.atsScore || 0}%
                     </div>
                     <div className="progress-bar-bg">
                       <motion.div 
                         initial={{ width: 0 }}
-                        animate={{ width: `${results.atsScore}%` }}
+                        animate={{ width: `${results.atsScore || 0}%` }}
                         transition={{ duration: 1, delay: 0.5 }}
                         className="progress-bar-fill"
                       />
@@ -296,7 +298,7 @@ function App() {
                   </div>
                   <div style={{ width: '100%', height: '250px' }}>
                     <ResponsiveContainer>
-                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={results.radarData}>
+                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={results.radarData || []}>
                         <PolarGrid stroke="rgba(0,0,0,0.1)" />
                         <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} />
                         <Radar name="Skills" dataKey="A" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.4} />
@@ -313,13 +315,13 @@ function App() {
                   <div style={{ marginBottom: '1.5rem' }}>
                     <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Found in Resume</h4>
                     <div>
-                      {results.keywordsFound.map(kw => <span key={kw} className="chip found">{kw}</span>)}
+                      {(results.keywordsFound || []).map(kw => <span key={kw} className="chip found">{kw}</span>)}
                     </div>
                   </div>
                   <div>
                     <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Recommended Additions</h4>
                     <div>
-                      {results.keywordsMissing.map(kw => <span key={kw} className="chip missing">{kw}</span>)}
+                      {(results.keywordsMissing || []).map(kw => <span key={kw} className="chip missing">{kw}</span>)}
                     </div>
                   </div>
                 </motion.div>
@@ -334,7 +336,7 @@ function App() {
                       <h2>Strengths</h2>
                     </div>
                     <ul className="styled-list">
-                      {results.strengths.map((str, i) => (
+                      {(results.strengths || []).map((str, i) => (
                         <li key={i}><CheckCircle size={20} className="icon-success" style={{flexShrink: 0}} /> <span>{str}</span></li>
                       ))}
                     </ul>
@@ -346,7 +348,7 @@ function App() {
                       <h2>Weaknesses</h2>
                     </div>
                     <ul className="styled-list">
-                      {results.weaknesses.map((wk, i) => (
+                      {(results.weaknesses || []).map((wk, i) => (
                         <li key={i}><XCircle size={20} className="icon-danger" style={{flexShrink: 0}} /> <span>{wk}</span></li>
                       ))}
                     </ul>
@@ -359,7 +361,7 @@ function App() {
                     <h2>AI Recommendations</h2>
                   </div>
                   <ul className="styled-list">
-                    {results.recommendations.map((rec, i) => (
+                    {(results.recommendations || []).map((rec, i) => (
                       <li key={i}><AlertCircle size={20} className="icon-warning" style={{flexShrink: 0}} /> <span>{rec}</span></li>
                     ))}
                   </ul>

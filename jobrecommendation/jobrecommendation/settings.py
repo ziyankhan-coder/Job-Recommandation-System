@@ -81,7 +81,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # React runs on port 5173 by default
 CORS_ALLOWED_ORIGINS = [
-    "https://job-recommandation-system.vercel.app",
+    '*', 'job-recommandation-system-dsv6.onrender.com',
     "http://localhost:5173",  # Local testing ke liye
     "http://127.0.0.1:5173",
 ]
