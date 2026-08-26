@@ -68,4 +68,10 @@ def analyze_resume(request):
         data = json.loads(cleaned_text)
         return Response(data)
     except Exception as e:
-        return Response({"error": f"AI Generation error: {str(e)}"}, status=500)
+        available_models = []
+        try:
+            for m in genai.list_models():
+                available_models.append(m.name)
+        except Exception:
+            pass
+        return Response({"error": f"AI Generation error: {str(e)}", "available_models": available_models}, status=500)
