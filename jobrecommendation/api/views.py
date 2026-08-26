@@ -35,7 +35,7 @@ def analyze_resume(request):
 
     # 2. Gemini Analysis
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        model = genai.GenerativeModel('gemini-flash-latest')
         prompt = f"""
         Act as an expert recruiter and ATS software. Analyze this resume text:
         {text[:4000]}
