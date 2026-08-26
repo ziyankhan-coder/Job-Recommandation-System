@@ -1,29 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 :root {
-  --primary: #6366f1; /* Indigo accent */
-  --primary-glow: rgba(99, 102, 241, 0.35);
+  --primary: #4f46e5; /* Indigo accent */
+  --primary-glow: rgba(79, 70, 229, 0.2);
   --secondary: #ec4899;
   
-  /* Dark Glassmorphism Values */
-  --bg-gradient-start: #0f172a;
-  --bg-gradient-end: #020617;
-  --surface: rgba(30, 41, 59, 0.7);
-  --surface-border: rgba(255, 255, 255, 0.1);
+  /* Light Glassmorphism Values */
+  --bg-gradient-start: #f8fafc;
+  --bg-gradient-end: #eff6ff;
+  --surface: rgba(255, 255, 255, 0.95);
+  --surface-border: rgba(0, 0, 0, 0.05);
   
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
   
   --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.15);
+  --success-bg: rgba(16, 185, 129, 0.1);
   --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.15);
+  --danger-bg: rgba(239, 68, 68, 0.1);
   --warning: #f59e0b;
-  --warning-bg: rgba(245, 158, 11, 0.15);
+  --warning-bg: rgba(245, 158, 11, 0.1);
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); /* Deep Dark Palette */
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
@@ -100,13 +100,13 @@ h1, h2, h3, h4 {
 
 /* Upload Zone */
 .upload-zone {
-  border: 2px dashed rgba(99, 102, 241, 0.4);
-  background: rgba(15, 23, 42, 0.6);
+  border: 2px dashed rgba(79, 70, 229, 0.3);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .upload-zone:hover, .upload-zone.active {
   border-color: var(--primary);
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 20px var(--primary-glow);
 }
 
