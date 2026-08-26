@@ -48,10 +48,10 @@ function App() {
     formData.append('pdf', file);
 
     try {
-      const response = await fetch('[https://job-recommandation-system-dsv6.onrender.com/api/analyze/](https://job-recommandation-system-dsv6.onrender.com/api/analyze/)', {
-  method: 'POST',
-  body: formData,
-});
+      const response = await fetch('https://job-recommandation-system-dsv6.onrender.com/api/analyze/', {
+        method: 'POST',
+        body: formData,
+      });
       
       const data = await response.json();
       
