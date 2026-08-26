@@ -173,6 +173,11 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
+                
+                <li class="nav-item ms-lg-2">
+                   <a href="https://job-recommandation-system.vercel.app/" target="_blank" class="nav-link" style="color: var(--primary-color) !important; font-weight: 600;">?? AI Resume Analyzer</a>
+                </li>
+
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' %}">My Profile</a>
@@ -184,19 +189,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'add_job' %}" style="color: var(--primary-color) !important; font-weight: 600;">+ Post Job</a>
                         </li>
-                    {% else %}
-                        <li class="nav-item ms-lg-2">
-                           <a href="https://job-recommandation-system.vercel.app/" class="...">🚀 AI Resume Analyzer</a>
-                        </li>
                     {% endif %}
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                         <a class="btn btn-nav-pill btn-login" href="{% url 'logout' %}">Log out</a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                         <a class="btn btn-nav-pill btn-login" href="{% url 'login' %}">Log in</a>
                     </li>
-                    <li class="nav-item mt-2 mt-lg-0">
+                    <li class="nav-item mt-2 mt-lg-0 ms-2">
                         <a class="btn btn-nav-pill btn-signup" href="{% url 'register' %}">Get Started</a>
                     </li>
                 {% endif %}
